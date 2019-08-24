@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 try:
-    a = input('Введите первое число: ')
-    b = input('Введите второе число: ')
-    print('Результат: ', int(a) / int(b))
-except (ValueError, ZeroDivisionError):
+    a = input('Введите строку : ')
+    b = input('Введите вторую строку: ')
+    print('Результат: ', str (a) / str(b))
+except (ValueError, ZeroDivisionError, TypeError):
     print('Что-то пошло не так...')
 '''
 Example:
