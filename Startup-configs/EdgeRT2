@@ -1,0 +1,168 @@
+
+!
+! No configuration change since last restart
+! NVRAM config last updated at 15:18:48 MSK Tue May 23 2017
+!
+upgrade fpd auto
+version 15.0
+service timestamps debug datetime localtime
+service timestamps log datetime localtime
+no service password-encryption
+!
+hostname EdgeRT2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+!
+!
+clock timezone MSK 3
+clock calendar-valid
+ip source-route
+ip cef
+!
+!
+!
+!
+no ip domain lookup
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+archive
+ path ftp://Maycal:P6yqS*#1@123.20.20.5/$H
+ write-memory
+ time-period 360
+!
+redundancy
+!
+!
+ip ftp source-interface Loopback0
+! 
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 50.0.8.1 255.255.255.0
+ !
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ duplex half
+ !
+!
+interface FastEthernet1/0
+ ip address 10.0.12.2 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly
+ duplex full
+ !
+!
+interface FastEthernet2/0
+ ip address 10.0.13.2 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly
+ duplex full
+ !
+!
+interface FastEthernet3/0
+ ip address 218.56.23.45 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly
+ duplex half
+ !
+!
+interface FastEthernet4/0
+ no ip address
+ shutdown
+ duplex half
+ !
+!
+interface FastEthernet5/0
+ no ip address
+ shutdown
+ duplex half
+ !
+!
+interface FastEthernet6/0
+ no ip address
+ shutdown
+ duplex half
+ !
+!
+router ospf 1
+ router-id 8.8.8.8
+ log-adjacency-changes
+ network 10.0.0.0 0.0.255.255 area 0
+ network 50.0.8.0 0.0.0.255 area 0
+ default-information originate metric 10
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+ip nat inside source list 7 interface FastEthernet3/0 overload
+ip route 0.0.0.0 0.0.0.0 218.56.23.1
+!
+access-list 1 permit 91.226.136.142
+access-list 1 permit 178.236.29.161
+access-list 2 permit 50.0.6.1
+access-list 2 permit 50.0.5.1
+access-list 7 permit 192.168.0.0 0.0.255.255
+access-list 7 permit 172.20.20.0 0.0.0.255
+access-list 7 permit 123.20.20.0 0.0.0.255
+!
+!
+!
+!
+!
+!
+control-plane
+ !
+!
+!
+mgcp fax t38 ecm
+mgcp behavior g729-variants static-pt
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ login
+!
+ntp authentication-key 1 md5 0758760A1B4F1B2A2D41084A0B69192B0A 7
+ntp authenticate
+ntp trusted-key 1
+ntp source FastEthernet3/0
+ntp access-group peer 1
+ntp access-group serve-only 2
+ntp master 5
+ntp update-calendar
+ntp server 91.226.136.142 prefer
+ntp server 178.236.29.161
+end

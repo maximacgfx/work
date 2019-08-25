@@ -1,0 +1,133 @@
+
+!
+! No configuration change since last restart
+! NVRAM config last updated at 15:30:27 MSK Tue May 23 2017
+!
+version 12.4
+service timestamps debug datetime localtime
+service timestamps log datetime localtime
+no service password-encryption
+!
+hostname AccSW6
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+memory-size iomem 5
+clock timezone MSK 3
+ip cef
+!
+!
+!
+!
+no ip domain lookup
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+archive
+ log config
+  hidekeys
+ path ftp://Maycal:P6yqS*#1@123.20.20.5/$H
+ write-memory
+ time-period 360
+! 
+!
+!
+!
+ip ftp source-interface Vlan50
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet1/0
+ switchport access vlan 5
+!
+interface FastEthernet1/1
+ switchport access vlan 6
+!
+interface FastEthernet1/2
+ switchport mode trunk
+!
+interface FastEthernet1/3
+ switchport mode trunk
+!
+interface FastEthernet1/4
+!
+interface FastEthernet1/5
+!
+interface FastEthernet1/6
+!
+interface FastEthernet1/7
+!
+interface FastEthernet1/8
+!
+interface FastEthernet1/9
+!
+interface FastEthernet1/10
+!
+interface FastEthernet1/11
+!
+interface FastEthernet1/12
+!
+interface FastEthernet1/13
+!
+interface FastEthernet1/14
+!
+interface FastEthernet1/15
+!
+interface Vlan1
+ no ip address
+!
+interface Vlan50
+ ip address 50.0.11.3 255.255.255.0
+!
+ip forward-protocol nd
+ip route 0.0.0.0 0.0.0.0 50.0.11.1
+!
+!
+ip http server
+no ip http secure-server
+!
+access-list 1 permit 50.0.3.1
+access-list 1 permit 50.0.4.1
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+ntp authentication-key 1 md5 1440454D594228041E7B30732D50351921 7
+ntp authenticate
+ntp trusted-key 1
+ntp clock-period 17179887
+ntp source Vlan50
+ntp access-group peer 1
+ntp server 50.0.3.1 key 1
+ntp server 50.0.4.1 key 1
+!
+end

@@ -1,0 +1,117 @@
+!
+upgrade fpd auto
+version 15.0
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname ISP
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+!
+!
+ip source-route
+ip cef
+!
+!
+!
+!
+no ip domain lookup
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ ip address 192.168.1.100 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly
+ duplex half
+ !
+!
+interface FastEthernet1/0
+ ip address 165.24.56.7 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly
+ duplex half
+ !
+!
+interface FastEthernet2/0
+ ip address 218.56.23.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly
+ duplex half
+ !
+!
+interface FastEthernet3/0
+ no ip address
+ shutdown
+ duplex half
+ !
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+ip nat inside source list 7 interface FastEthernet0/0 overload
+ip route 0.0.0.0 0.0.0.0 192.168.0.1
+ip route 0.0.0.0 0.0.0.0 192.168.1.1
+ip route 165.24.57.0 255.255.255.0 165.24.56.78
+!
+access-list 7 permit 165.24.56.0 0.0.0.255
+access-list 7 permit 238.56.23.0 0.0.0.255
+access-list 7 permit 218.56.23.0 0.0.0.255
+access-list 7 permit 165.24.57.0 0.0.0.255
+!
+!
+!
+!
+!
+!
+control-plane
+ !
+!
+!
+mgcp fax t38 ecm
+mgcp behavior g729-variants static-pt
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ login
+!
+end

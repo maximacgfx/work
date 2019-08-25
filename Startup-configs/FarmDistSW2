@@ -1,0 +1,187 @@
+
+!
+! Last configuration change at 14:45:26 MSK Tue May 23 2017
+! NVRAM config last updated at 15:16:21 MSK Tue May 23 2017
+!
+version 12.4
+service timestamps debug datetime localtime
+service timestamps log datetime localtime
+no service password-encryption
+!
+hostname FarmDistSW2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+memory-size iomem 5
+clock timezone MSK 3
+ip cef
+!
+!
+!
+!
+no ip domain lookup
+!
+multilink bundle-name authenticated
+!
+!
+!
+port-channel load-balance src-dst-mac
+!
+!
+!
+spanning-tree vlan 20 priority 16384
+archive
+ log config
+  hidekeys
+ path ftp://Maycal:P6yqS*#1@123.20.20.5/$H
+ write-memory
+ time-period 360
+! 
+!
+!
+vlan internal allocation policy ascending
+!
+ip ftp source-interface Loopback0
+!
+!
+!
+interface Loopback0
+ ip address 50.0.10.1 255.255.255.0
+!
+interface Port-channel1
+ switchport mode trunk
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet1/0
+!
+interface FastEthernet1/1
+ no switchport
+ ip address 10.0.17.1 255.255.255.0
+!
+interface FastEthernet1/2
+ no switchport
+ ip address 10.0.16.1 255.255.255.0
+!
+interface FastEthernet1/3
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface FastEthernet1/4
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface FastEthernet1/5
+ no switchport
+ ip address 20.0.2.2 255.255.255.0
+!
+interface FastEthernet1/6
+ switchport access vlan 20
+!
+interface FastEthernet1/7
+!
+interface FastEthernet1/8
+!
+interface FastEthernet1/9
+!
+interface FastEthernet1/10
+!
+interface FastEthernet1/11
+!
+interface FastEthernet1/12
+!
+interface FastEthernet1/13
+!
+interface FastEthernet1/14
+!
+interface FastEthernet1/15
+!
+interface Vlan1
+ no ip address
+!
+interface Vlan20
+ ip address 123.20.20.51 255.255.255.0
+ standby 1 ip 123.20.20.1
+ standby 1 preempt
+!
+router ospf 1
+ router-id 10.10.10.10
+ log-adjacency-changes
+ network 10.0.0.0 0.0.0.255 area 0
+ network 10.0.0.0 0.0.255.255 area 0
+ network 20.0.0.0 0.0.255.255 area 0
+ network 50.0.10.0 0.0.0.255 area 0
+ network 123.20.20.0 0.0.0.255 area 0
+!
+ip forward-protocol nd
+!
+!
+ip http server
+no ip http secure-server
+!
+access-list 1 permit 50.0.6.1
+access-list 1 permit 50.0.5.1
+access-list 1 permit 50.0.9.1
+access-list 2 permit 60.0.1.1
+access-list 2 permit 123.20.20.5
+mac-address-table static c221.8511.0000 interface FastEthernet1/4 vlan 1
+mac-address-table static c221.064a.0000 interface FastEthernet1/4 vlan 1
+mac-address-table static c221.c3ec.0000 interface FastEthernet1/4 vlan 1
+mac-address-table static c221.36fa.0000 interface FastEthernet1/4 vlan 1
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+ntp authentication-key 1 md5 15455C4A516C290B126036641C44240C23 7
+ntp authenticate
+ntp trusted-key 1
+ntp clock-period 17179745
+ntp source Loopback0
+ntp access-group peer 1
+ntp access-group serve-only 2
+ntp master 7
+ntp server 50.0.5.1 key 1
+ntp server 50.0.6.1 key 1
+ntp peer 50.0.9.1 key 1
+!
+event manager applet SHUT_SVI_VLANS 
+ event timer countdown time 100
+ action 1.0 cli command "enable"
+ action 2.0 cli command "conf ter"
+ action 3.0 cli command "int vlan 20"
+ action 4.0 cli command "shutdown"
+ action 5.0 cli command "end"
+ action 6.0 cli command "exit"
+event manager applet ON_SVI_VLANS 
+ event timer countdown time 150
+ action 1.0 cli command "enable"
+ action 2.0 cli command "conf ter"
+ action 3.0 cli command "int vlan 20"
+ action 4.0 cli command "no shutdown"
+ action 5.0 cli command "end"
+ action 6.0 cli command "exit"
+!
+end

@@ -1,0 +1,203 @@
+
+!
+! Last configuration change at 15:19:09 MSK Tue May 23 2017
+! NVRAM config last updated at 15:19:09 MSK Tue May 23 2017
+!
+version 12.4
+service timestamps debug datetime localtime
+service timestamps log datetime localtime
+no service password-encryption
+!
+hostname DistSW1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+memory-size iomem 5
+clock timezone MSK 3
+ip cef
+!
+!
+!
+!
+no ip domain lookup
+!
+multilink bundle-name authenticated
+!
+!
+!
+port-channel load-balance src-dst-mac
+!
+!
+!
+spanning-tree vlan 2 priority 8192
+spanning-tree vlan 3 priority 16384
+archive
+ log config
+  hidekeys
+ path ftp://Maycal:P6yqS*#1@123.20.20.5/$H
+ write-memory
+ time-period 360
+! 
+!
+!
+vlan internal allocation policy ascending
+!
+ip ftp source-interface Loopback0
+!
+!
+!
+interface Loopback0
+ ip address 50.0.1.1 255.255.255.0
+!
+interface Port-channel1
+ switchport mode trunk
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet1/0
+!
+interface FastEthernet1/1
+ switchport mode trunk
+!
+interface FastEthernet1/2
+ no switchport
+ ip address 10.0.1.1 255.255.255.0
+!
+interface FastEthernet1/3
+ no switchport
+ ip address 10.0.2.1 255.255.255.0
+!
+interface FastEthernet1/4
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface FastEthernet1/5
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface FastEthernet1/6
+ switchport mode trunk
+!
+interface FastEthernet1/7
+ switchport mode trunk
+!
+interface FastEthernet1/8
+ switchport mode trunk
+!
+interface FastEthernet1/9
+!
+interface FastEthernet1/10
+!
+interface FastEthernet1/11
+!
+interface FastEthernet1/12
+!
+interface FastEthernet1/13
+!
+interface FastEthernet1/14
+!
+interface FastEthernet1/15
+!
+interface Vlan1
+ no ip address
+!
+interface Vlan2
+ ip address 192.168.2.50 255.255.255.0
+ ip helper-address 60.0.1.1
+ standby 1 ip 192.168.2.1
+ standby 1 priority 110
+ standby 1 preempt
+!
+interface Vlan3
+ ip address 192.168.3.50 255.255.255.0
+ ip helper-address 60.0.1.1
+ standby 1 preempt
+ standby 2 ip 192.168.3.1
+!
+interface Vlan51
+ ip address 50.0.12.50 255.255.255.0
+ standby 3 ip 50.0.12.1
+ standby 3 priority 110
+ standby 3 preempt
+!
+router ospf 1
+ router-id 1.1.1.1
+ log-adjacency-changes
+ network 10.0.0.0 0.0.255.255 area 0
+ network 50.0.1.0 0.0.0.255 area 0
+ network 50.0.12.0 0.0.0.255 area 0
+ network 192.168.0.0 0.0.255.255 area 0
+!
+ip forward-protocol nd
+!
+!
+ip http server
+no ip http secure-server
+!
+access-list 1 permit 50.0.2.1
+access-list 1 permit 50.0.6.1
+access-list 1 permit 50.0.5.1
+access-list 2 permit 50.0.12.4
+access-list 2 permit 50.0.12.5
+access-list 2 permit 50.0.12.2
+access-list 2 permit 50.0.12.3
+mac-address-table static c204.6c5a.0000 interface FastEthernet1/4 vlan 1
+mac-address-table static 0000.0c07.ac01 interface FastEthernet1/5 vlan 2
+mac-address-table static 0000.0c07.ac03 interface FastEthernet1/5 vlan 51
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+ntp authentication-key 1 md5 124E5251474D0E2B1078276E3C76101C25 7
+ntp authenticate
+ntp trusted-key 1
+ntp clock-period 17179885
+ntp source Loopback0
+ntp access-group peer 1
+ntp access-group serve-only 2
+ntp master 7
+ntp peer 50.0.2.1 key 1
+ntp server 50.0.5.1 key 1
+ntp server 50.0.6.1 key 1
+!
+event manager applet SHUT_SVI_VLANS 
+ event timer countdown time 100
+ action 1.0 cli command "enable"
+ action 2.0 cli command "conf ter"
+ action 3.0 cli command "int range vlan 2 , vlan 3 , vlan 51"
+ action 4.0 cli command "shutdown"
+ action 5.0 cli command "end"
+ action 6.0 cli command "exit"
+event manager applet ON_SVI_VLANS 
+ event timer countdown time 150
+ action 1.0 cli command "enable"
+ action 2.0 cli command "conf ter"
+ action 3.0 cli command "int range vlan 2 , vlan 3 , vlan 51"
+ action 4.0 cli command "no shutdown"
+ action 5.0 cli command "end"
+ action 6.0 cli command "exit"
+!
+end

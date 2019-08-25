@@ -1,0 +1,188 @@
+
+!
+! Last configuration change at 15:18:53 MSK Tue May 23 2017
+! NVRAM config last updated at 15:18:54 MSK Tue May 23 2017
+!
+upgrade fpd auto
+version 15.0
+service timestamps debug datetime localtime
+service timestamps log datetime localtime
+no service password-encryption
+!
+hostname EdgeRT1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+!
+!
+clock timezone MSK 3
+clock calendar-valid
+ip source-route
+ip cef
+!
+!
+!
+!
+no ip domain lookup
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+archive
+ log config
+  logging enable
+ path ftp://Maycal:P6yqS*#1@123.20.20.5/$H
+ rollback retry timeout 40
+ write-memory
+ time-period 360
+!
+redundancy
+!
+!
+ip ftp source-interface Loopback0
+!
+track 1 ip sla 1 reachability
+! 
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 50.0.7.1 255.255.255.0
+ !
+!
+interface Loopback1
+ ip address 165.24.57.11 255.255.255.0
+ !
+!
+interface FastEthernet0/0
+ ip address dhcp
+ ip virtual-reassembly
+ shutdown
+ duplex half
+ !
+!
+interface FastEthernet1/0
+ ip address 10.0.10.2 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly
+ duplex full
+ !
+!
+interface FastEthernet2/0
+ ip address 10.0.11.2 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly
+ duplex full
+ !
+!
+interface FastEthernet3/0
+ ip address 165.24.56.78 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly
+ duplex half
+ !
+!
+interface FastEthernet4/0
+ no ip address
+ shutdown
+ duplex half
+ !
+!
+interface FastEthernet5/0
+ no ip address
+ shutdown
+ duplex half
+ !
+!
+interface FastEthernet6/0
+ no ip address
+ shutdown
+ duplex half
+ !
+!
+router ospf 1
+ router-id 7.7.7.7
+ log-adjacency-changes
+ network 10.0.0.0 0.0.255.255 area 0
+ network 50.0.7.0 0.0.0.255 area 0
+ default-information originate always route-map DEFAULT-INFORMATION
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+ip nat inside source list 7 interface FastEthernet3/0 overload
+ip route 155.155.155.155 255.255.255.255 Null0 track 1
+ip route 0.0.0.0 0.0.0.0 165.24.56.7
+!
+!
+ip prefix-list control_route seq 10 permit 155.155.155.155/32
+ip sla 1
+ icmp-echo 217.69.139.199 source-interface Loopback1
+ frequency 10
+ip sla schedule 1 life forever start-time now
+access-list 1 permit 91.207.136.50
+access-list 1 permit 88.147.254.227
+access-list 2 permit 50.0.6.1
+access-list 2 permit 50.0.5.1
+access-list 7 permit 192.168.0.0 0.0.255.255
+access-list 7 permit 172.20.20.0 0.0.0.255
+access-list 7 permit 123.20.20.0 0.0.0.255
+!
+!
+!
+!
+route-map DEFAULT-INFORMATION permit 10
+ match ip address prefix-list control_route
+!
+!
+!
+control-plane
+ !
+!
+!
+mgcp fax t38 ecm
+mgcp behavior g729-variants static-pt
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ login
+!
+ntp authentication-key 1 md5 0758760A1B4F1B2A2D41084A0B69192B0A 7
+ntp authenticate
+ntp trusted-key 1
+ntp source FastEthernet3/0
+ntp access-group peer 1
+ntp access-group serve-only 2
+ntp master 3
+ntp update-calendar
+ntp server 91.207.136.50
+ntp server 88.147.254.227 prefer
+end

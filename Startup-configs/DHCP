@@ -1,0 +1,175 @@
+
+!
+! Last configuration change at 14:53:39 MSK Tue May 23 2017
+! NVRAM config last updated at 15:21:21 MSK Tue May 23 2017
+!
+upgrade fpd auto
+version 15.0
+service timestamps debug datetime localtime
+service timestamps log datetime localtime
+no service password-encryption
+!
+hostname DHCP
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+!
+!
+clock timezone MSK 3
+ip source-route
+ip cef
+!
+!
+ip dhcp excluded-address 192.168.3.1
+ip dhcp excluded-address 192.168.2.1
+ip dhcp excluded-address 192.168.4.1
+ip dhcp excluded-address 192.168.5.1
+ip dhcp excluded-address 192.168.6.1
+ip dhcp excluded-address 192.168.7.1
+ip dhcp excluded-address 192.168.2.50 192.168.2.51
+ip dhcp excluded-address 192.168.3.50 192.168.3.51
+ip dhcp excluded-address 192.168.4.50 192.168.4.51
+ip dhcp excluded-address 192.168.5.50 192.168.5.51
+ip dhcp excluded-address 192.168.6.50 192.168.6.51
+ip dhcp excluded-address 192.168.7.50 192.168.7.51
+!
+ip dhcp pool VLAN2POOL
+   network 192.168.2.0 255.255.255.0
+   default-router 192.168.2.1 
+   dns-server 192.168.0.1 
+   lease 5
+!
+ip dhcp pool VLAN3POOL
+   network 192.168.3.0 255.255.255.0
+   default-router 192.168.3.1 
+   dns-server 192.168.0.1 
+   lease 5
+!
+ip dhcp pool VLAN4POOL
+   network 192.168.4.0 255.255.255.0
+   default-router 192.168.4.1 
+   dns-server 192.168.0.1 
+   lease 5
+!
+ip dhcp pool VLAN5POOL
+   network 192.168.5.0 255.255.255.0
+   default-router 192.168.5.1 
+   dns-server 192.168.0.1 
+   lease 5
+!
+ip dhcp pool VLAN6POOL
+   network 192.168.6.0 255.255.255.0
+   default-router 192.168.6.1 
+   dns-server 192.168.0.1 
+   lease 5
+!
+ip dhcp pool VLAN7POOL
+   network 192.168.7.0 255.255.255.0
+   default-router 192.168.7.1 
+   dns-server 192.168.0.1 
+   lease 5
+!
+!
+no ip domain lookup
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+archive
+ path ftp://Maycal:P6yqS*#1@123.20.20.5/$H
+ write-memory
+ time-period 360
+!
+redundancy
+!
+!
+ip ftp source-interface Loopback0
+! 
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 60.0.1.1 255.255.255.0
+ !
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ duplex half
+ !
+!
+interface FastEthernet1/0
+ ip address 20.0.1.1 255.255.255.0
+ duplex full
+ !
+!
+interface FastEthernet2/0
+ ip address 20.0.2.1 255.255.255.0
+ duplex full
+ !
+!
+router ospf 1
+ router-id 11.11.11.11
+ log-adjacency-changes
+ network 20.0.0.0 0.0.255.255 area 0
+ network 60.0.1.0 0.0.0.255 area 0
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+!
+access-list 1 permit 50.0.10.1
+access-list 1 permit 50.0.9.1
+!
+!
+!
+!
+!
+!
+control-plane
+ !
+!
+!
+mgcp fax t38 ecm
+mgcp behavior g729-variants static-pt
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ login
+!
+ntp authentication-key 1 md5 08761B085C5F073828580F422568162711 7
+ntp authenticate
+ntp trusted-key 1
+ntp source Loopback0
+ntp access-group peer 1
+ntp server 50.0.9.1 key 1
+ntp server 50.0.10.1 key 1
+end
