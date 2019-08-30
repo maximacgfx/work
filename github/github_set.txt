@@ -41,3 +41,32 @@ Port 443
 PreferredAuthentications publickey
 IdentityFile ~/.ssh/id_rsa
 
+=================================================
+
+Вызываеится команда  ssh-agent - без аргументов, получаем выхлоп
+внимательно читаем: там написано что нужно экспортировать две переменные
+export SSH_AUTH_SOCK;
+export SSH_AGENT_PID;
+
+$ ssh-agent
+SSH_AUTH_SOCK=/tmp/ssh-FBIW8RzMRksk/agent.1747; export SSH_AUTH_SOCK;
+SSH_AGENT_PID=1748; export SSH_AGENT_PID;
+echo Agent pid 1748;
+
+Так и делаем
+
+СИСТЕМА@minint-4ag8b5m MINGW32 /x/code/Python/work/exercises (master)
+$ export SSH_AGENT_PID=1748
+
+
+СИСТЕМА@minint-4ag8b5m MINGW32 /x/code/Python/work/exercises (master)
+$ SSH_AUTH_SOCK=/tmp/ssh-FBIW8RzMRksk/agent.1747
+
+Далее добавляем ключ командой ssh-add
+
+СИСТЕМА@minint-4ag8b5m MINGW32 ~/.ssh
+$ ssh-add
+Identity added: /x/Users/Default/.ssh/id_rsa (********@*****.***)
+
+Энд Всё.
+
