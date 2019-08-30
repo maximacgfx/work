@@ -9,4 +9,18 @@
 
 '''
 
-mac = 'AAAA:BBBB:CCCC'
+mac1 = '0BAA:CEB0:CCCC'
+mac2 = 'AAAA:BBBB:CCCC'
+
+print (mac1)
+print (mac2)
+
+# ~ print(bin(int(mac1.replace(':',''),16))[2:])
+# ~ print(bin(int(mac2.replace(':',''),16))[2:])
+
+
+#len('{:0>48}'.format(bin(int(mac1.replace(':',''),16))[2:]))
+
+print('{:0>48}'.format(bin(int(mac1.replace(':',''),16))[2:]))
+print('{:0>48}'.format(bin(int(mac2.replace(':',''),16))[2:]))
+
