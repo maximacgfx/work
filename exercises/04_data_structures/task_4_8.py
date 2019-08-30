@@ -18,4 +18,17 @@
 
 '''
 
-ip = '192.168.3.1'
+ip = '192.168.3.192'
+
+
+print('%-9s%-9s%-9s%-9s' % tuple(ip.split(sep='.')))
+
+#  опыт - сын ошибок трудных
+#print('%08d%08d%08d%08d' % tuple([int(i) for i in ip.split(sep='.')]))
+
+#[180]: '%08d' % int(bin('1')[2:])
+
+#tuple([int(i) for i in ip.split(sep='.')])
+
+for y in tuple([int(i) for i in ip.split(sep='.')]):
+	print('%08d' % int(bin(y)[2:]), end=' ')
