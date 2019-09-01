@@ -21,12 +21,26 @@
 
 ip = '192.168.3.192'
 
+a,b,c,d = ip.split('.')
 
-print('%-9s%-9s%-9s%-9s' % tuple(ip.split(sep='.')))
+
+print ('{:9}{:9}{:9}{:9}'.format(a,b,c,d))
+print ('{:08b} {:08b} {:08b} {:08b} '.format(int(a),int(b),int(c),int(d)))
 
 
-for y in tuple([int(i) for i in ip.split(sep='.')]):
-	print('%08d' % int(bin(y)[2:]), end=' ')
+
+
+
+#Сравни для метода
+#		print('%-9s%-9s%-9s%-9s' % tuple(ip.split(sep='.')))
+# ~ 	for y in tuple([int(i) for i in ip.split(sep='.')]):
+# ~ 	print('%08d' % int(bin(y)[2:]), end=' ')
+
+
+
+
+
+
 
 #  опыт - сын ошибок трудных
 #print('%08d%08d%08d%08d' % tuple([int(i) for i in ip.split(sep='.')]))
