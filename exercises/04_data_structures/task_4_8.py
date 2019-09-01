@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 '''
 Задание 4.8
 
@@ -33,6 +34,9 @@ for y in tuple([int(i) for i in ip.split(sep='.')]):
 #[180]: '%08d' % int(bin('1')[2:])
 
 #tuple([int(i) for i in ip.split(sep='.')])
+
+
+
 
 '''
 In [1]: ip = '192.168.3.1'
