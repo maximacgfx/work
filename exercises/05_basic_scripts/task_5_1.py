@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import re
+
 '''
 Задание 5.1
 
@@ -47,6 +49,22 @@ london_co = {
     }
 }
 
-name = input("Введите имя устройства: ")
+device_list = london_co.keys()#получаем список ключей 
 
-print(london_co[name])
+#debug print(str(device_list))
+
+print ('\n\n','Список устроуств',re.sub( '[\[\]\']','',str(list(device_list))))
+# Выводи список устройств
+name = input("\n Введите имя устройства: ")
+
+
+
+
+
+if name in device_list:
+		param_list = london_co[name].keys()
+		for i in param_list:
+			print('{:15}:{:10}'.format(i ,london_co[name][i]))
+
+
+
