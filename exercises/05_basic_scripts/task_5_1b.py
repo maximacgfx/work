@@ -44,3 +44,7 @@ london_co = {
         'routing': True
     }
 }
+$ python task_5_2b.py
+Введите имя устройства: r1
+Введите имя параметра (ios, model, vendor, location, ip): ip
+10.255.0.1
