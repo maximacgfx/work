@@ -50,7 +50,7 @@ london_co = {
 
 
 device_list = london_co.keys()
-print('\n device_list = london_co.keys()  это',type(device_list))
+#debug print('\n device_list = london_co.keys()  это',type(device_list))
 print('#'*40)
 print('\n Список устройств', re.sub( r'[\[\]\']','', str(list(device_list ))))
 name  = input (' Введите имя устройства >: ')
