@@ -65,8 +65,9 @@ mess = 'Введите имя устройства('+ re.sub( r'[\[\]\']', '', s
 device = input(mess)
 if device in device_list:
 	#print(' Устройство ',device, ' это ' ,london_co[device]['device'])
-	print('-'*40+'\n', london_co[device]['device'].upper(), '   ', device.upper(),'\n'+'-'*40+'\n')
+	print('>'+'-'*39+'\n', london_co[device]['device'].upper(), '   ', device.upper(),'\n'+'-'*40+'\n')
 	param_list = list(london_co[device].keys())
 	#print (param_list)
 	for param in param_list:
 		print(' %-10s: %-15s' % (param , london_co[device][param]))
+	print('\n'+'-'*39+'<'+'\n')
