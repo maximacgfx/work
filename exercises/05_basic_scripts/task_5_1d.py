@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 '''
 Задание 5.1d
 
@@ -43,3 +44,35 @@ london_co = {
         'routing': True
     }
 }
+
+device_list =london_co.keys()
+
+mess = 'введите имя устройства('+ re.sub('[\[\]\']','',str(list(device_list)))+')\n:>'
+print('>'+'-'*39)
+count = 0;
+
+while count <= 10:
+    device = input(mess)
+    if device not in device_list:
+        print(count,' Нет такого устройсва в списке. Повторите ввод')        
+        count +=1
+        continue
+    else:break
+param_list = london_co[device].keys()
+mess = 'введите параметр ('+ re.sub('[\[\]\']','',str(list(param_list)))+')\n:>'
+param = input(mess)
+
+#debug
+#print('param in param_list', param in param_list)
+#print('param.UP =', param.upper() ,' in param_list', param.upper() in param_list)
+#print('param.lower =', param.lower() ,' in param_list', param.lower() in param_list)
+
+if( (param in param_list) or (param.lower() in param_list)) :
+    print('\n param ',param,' = ', london_co[device][param.lower()] )
+    print('-'*39+'<')
+else:
+    print(' нет такого параметра в списке')
+
+
+
+
